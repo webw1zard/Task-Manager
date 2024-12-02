@@ -1,0 +1,150 @@
+.task-manager {
+  max-width: 900px;
+  margin: auto;
+  background: linear-gradient(to bottom, #ffffff, #e8f1ff);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.task-manager h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #007bff;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+.task-manager .d-flex input {
+  border: 2px solid #007bff;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 1rem;
+}
+
+.task-manager .d-flex input:focus {
+  outline: none;
+  border-color: #0056b3;
+  box-shadow: 0px 0px 8px rgba(0, 123, 255, 0.5);
+}
+
+.task-manager .btn-primary {
+  background: linear-gradient(45deg, #007bff, #0056b3);
+  border: none;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: all 0.3s ease-in-out;
+}
+
+.task-manager .btn-primary:hover {
+  background: linear-gradient(45deg, #0056b3, #007bff);
+  transform: translateY(-2px);
+  box-shadow: 0px 4px 10px rgba(0, 123, 255, 0.4);
+}
+
+.task-manager h3 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 5px;
+}
+
+.task-manager .list-group {
+  background: #f9f9f9;
+  border-radius: 5px;
+  padding: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.task-manager .list-group-item {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  padding: 10px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease-in-out;
+}
+
+.task-manager .list-group-item:hover {
+  background: #f1f9ff;
+  border-color: #007bff;
+}
+
+.task-manager .btn-danger {
+  background: linear-gradient(45deg, #ff5f5f, #e60000);
+  border: none;
+  color: white;
+  padding: 5px 15px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  transition: all 0.3s ease-in-out;
+}
+
+.task-manager .btn-danger:hover {
+  background: linear-gradient(45deg, #e60000, #ff5f5f);
+  box-shadow: 0px 4px 8px rgba(255, 0, 0, 0.3);
+}
+
+.task-manager .btn-success {
+  background: linear-gradient(45deg, #00c851, #007e33);
+  border: none;
+  color: white;
+  padding: 5px 15px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  transition: all 0.3s ease-in-out;
+}
+
+.task-manager .btn-success:hover {
+  background: linear-gradient(45deg, #007e33, #00c851);
+  box-shadow: 0px 4px 8px rgba(0, 200, 80, 0.3);
+}
+
+.task-manager .btn-warning {
+  background: linear-gradient(45deg, #ffbb33, #ff8800);
+  border: none;
+  color: white;
+  padding: 5px 15px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  transition: all 0.3s ease-in-out;
+}
+
+.task-manager .btn-warning:hover {
+  background: linear-gradient(45deg, #ff8800, #ffbb33);
+  box-shadow: 0px 4px 8px rgba(255, 136, 0, 0.3);
+}
+
+.task-manager p {
+  font-style: italic;
+  color: #888;
+}
+.task-manager .list-group::-webkit-scrollbar {
+  width: 8px;
+}
+
+.task-manager .list-group::-webkit-scrollbar-thumb {
+  background: #007bff;
+  border-radius: 10px;
+}
+
+.task-manager .list-group::-webkit-scrollbar-thumb:hover {
+  background: #0056b3;
+}
+.gg{
+  font-size: 1.5rem;
+  color: #007bff;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+  display: flex;
+}
+.ml-2{
+  margin-left: 5px;
+}
