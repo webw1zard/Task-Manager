@@ -63,13 +63,39 @@ const TaskManager: React.FC = () => {
       .then(() => {
         const deletedTask = tasks.find((task) => task.id === id);
         if (deletedTask) {
-          setDeletedTasks((prev) => [...prev, { ...deletedTask, active: false }]);
+          setDeletedTasks((prev) => [
+            ...prev,
+            { ...deletedTask, active: false },
+          ]);
           setTasks((prev) => prev.filter((task) => task.id !== id));
         }
         toast.info("Task moved to Recently Deleted.");
       })
       .catch(() => {
         toast.error("Failed to delete task!");
+      });
+  };
+
+  const undoAll = () => {
+    if (deletedTasks.length === 0) {
+      toast.info("No tasks to restore.");
+      return;
+    }
+
+    const updatedTasks = deletedTasks.map((task) => ({
+      ...task,
+      active: true,
+    }));
+
+    axios
+      .put(`${API_URL}/restore-all`, { tasks: updatedTasks }) 
+      .then(() => {
+        setTasks((prev) => [...prev, ...updatedTasks]);
+        setDeletedTasks([]);
+        toast.success("All tasks restored!");
+      })
+      .catch(() => {
+        toast.error("Failed to restore all tasks!");
       });
   };
 
@@ -239,7 +265,20 @@ const TaskManager: React.FC = () => {
               </li>
             ))}
           </ul>
-          <button className="btn btn-danger btn-sm mt-2" onClick={()=>{setDeletedTasks([])}}>Clear ALl</button>
+          <button
+            className="btn btn-danger btn-sm mt-2"
+            onClick={() => {
+              setDeletedTasks([]);
+            }}
+          >
+            Clear All
+          </button>
+          <button
+            className="btn btn-warning btn-sm mt-2 ms-2"
+            onClick={() => undoAll()}
+          >
+            Undo All
+          </button>
         </div>
       </div>
     </div>
