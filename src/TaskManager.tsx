@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 interface Task {
   id: string;
@@ -113,23 +112,16 @@ const TaskManager: React.FC = () => {
       });
   };
 
-  const handleDragEnd = (result: any) => {
-    if (!result.destination) return;
-
-    const { source, destination } = result;
-
-    if (source.droppableId !== destination.droppableId) return;
-
-    const list = source.droppableId === "tasks" ? tasks : deletedTasks;
-    const reorderedList = Array.from(list);
-    const [movedItem] = reorderedList.splice(source.index, 1);
-    reorderedList.splice(destination.index, 0, movedItem);
-
-    if (source.droppableId === "tasks") {
-      setTasks(reorderedList);
-    } else {
-      setDeletedTasks(reorderedList);
-    }
+  const deleteTaskPermanently = (id: string) => {
+    axios
+      .delete(`${API_URL}/${id}`)
+      .then(() => {
+        setDeletedTasks((prev) => prev.filter((task) => task.id !== id));
+        toast.success("Task deleted permanently!");
+      })
+      .catch(() => {
+        toast.error("Failed to delete task permanently!");
+      });
   };
 
   const filteredTasks = tasks.filter((task) =>
@@ -164,119 +156,92 @@ const TaskManager: React.FC = () => {
         />
       </div>
 
-      <DragDropContext onDragEnd={handleDragEnd}>
-        <div className="row">
-          <div className="col-md-6">
-            <h3>My Tasks</h3>
-            <Droppable droppableId="tasks">
-              {(provided: any) => (
-                <ul
-                  className="list-group"
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                >
-                  {filteredTasks.map((task, index) => (
-                    <Draggable key={task.id} draggableId={task.id} index={index}>
-                      {(provided: any) => (
-                        <li
-                          className="list-group-item d-flex justify-content-between align-items-center"
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                        >
-                          {editingTaskId === task.id ? (
-                            <>
-                              <input
-                                type="text"
-                                className="form-control me-2"
-                                value={editingTaskName}
-                                onChange={(e) => setEditingTaskName(e.target.value)}
-                              />
-                              <button
-                                className="btn btn-success btn-sm"
-                                onClick={() => handleEditTask(task.id)}
-                              >
-                                Save
-                              </button>
-                              <button
-                                className="btn btn-secondary btn-sm ms-2"
-                                onClick={() => setEditingTaskId(null)}
-                              >
-                                Cancel
-                              </button>
-                            </>
-                          ) : (
-                            <>
-                              <span>{task.name}</span>
-                              <div>
-                                <button
-                                  className="btn btn-warning btn-sm me-2"
-                                  onClick={() => {
-                                    setEditingTaskId(task.id);
-                                    setEditingTaskName(task.name);
-                                  }}
-                                >
-                                  Edit
-                                </button>
-                                <button
-                                  className="btn btn-danger btn-sm"
-                                  onClick={() => deleteTask(task.id)}
-                                >
-                                  Delete
-                                </button>
-                              </div>
-                            </>
-                          )}
-                        </li>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </ul>
-              )}
-            </Droppable>
-          </div>
-
-          <div className="col-md-6">
-            <h3>Recently Deleted</h3>
-            <Droppable droppableId="deletedTasks">
-              {(provided: any) => (
-                <ul
-                  className="list-group"
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                >
-                  {filteredDeletedTasks.map((task, index) => (
-                    <Draggable
-                      key={task.id}
-                      draggableId={`deleted-${task.id}`}
-                      index={index}
+      <div className="row">
+        <div className="col-md-6">
+          <h3>My Tasks</h3>
+          <ul className="list-group">
+            {filteredTasks.map((task) => (
+              <li
+                key={task.id}
+                className="list-group-item d-flex justify-content-between align-items-center"
+              >
+                {editingTaskId === task.id ? (
+                  <>
+                    <input
+                      type="text"
+                      className="form-control me-2"
+                      value={editingTaskName}
+                      onChange={(e) => setEditingTaskName(e.target.value)}
+                    />
+                    <button
+                      className="btn btn-success btn-sm"
+                      onClick={() => handleEditTask(task.id)}
                     >
-                      {(provided: any) => (
-                        <li
-                          className="list-group-item d-flex justify-content-between align-items-center"
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                        >
-                          <span>{task.name}</span>
-                          <button
-                            className="btn btn-success btn-sm"
-                            onClick={() => restoreTask(task.id)}
-                          >
-                            Undo
-                          </button>
-                        </li>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </ul>
-              )}
-            </Droppable>
-          </div>
+                      Save
+                    </button>
+                    <button
+                      className="btn btn-secondary btn-sm ms-2"
+                      onClick={() => setEditingTaskId(null)}
+                    >
+                      Cancel
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <span>{task.name}</span>
+                    <div>
+                      <button
+                        className="btn btn-warning btn-sm me-2"
+                        onClick={() => {
+                          setEditingTaskId(task.id);
+                          setEditingTaskName(task.name);
+                        }}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="btn btn-danger btn-sm"
+                        onClick={() => deleteTask(task.id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </>
+                )}
+              </li>
+            ))}
+          </ul>
         </div>
-      </DragDropContext>
+
+        <div className="col-md-6">
+          <h3>Recently Deleted</h3>
+          <ul className="list-group">
+            {filteredDeletedTasks.map((task) => (
+              <li
+                key={task.id}
+                className="list-group-item d-flex justify-content-between align-items-center"
+              >
+                <span>{task.name}</span>
+                <div>
+                  <button
+                    className="btn btn-success btn-sm"
+                    onClick={() => restoreTask(task.id)}
+                  >
+                    Undo
+                  </button>
+                  <button
+                    className="btn btn-danger btn-sm ms-2"
+                    onClick={() => deleteTaskPermanently(task.id)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+          <button className="btn btn-danger btn-sm mt-2" onClick={()=>{setDeletedTasks([])}}>Clear ALl</button>
+        </div>
+      </div>
     </div>
   );
 };
